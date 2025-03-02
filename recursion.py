@@ -17,7 +17,6 @@ UT EID 2:
 """
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def group_sum(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to the
@@ -26,23 +25,21 @@ def group_sum(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
-    if target == 0: 
-        return True 
+    if target == 0:
+        return True
     if start >= len(nums):
-        return False 
-    
+        return False
     if group_sum(start + 1, nums, target - nums[start]):
         return True
     if group_sum(start + 1, nums, target):
         return True
-    else: 
+    else:
 
         return False
 
 
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def group_sum_6(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to the
@@ -52,20 +49,18 @@ def group_sum_6(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
-    if target == 0: 
+    if target == 0:
         return True
     if start >= len(nums):
-        return False 
-    
-    if nums[start] == 6: 
+        return False
+    if nums[start] == 6:
         return group_sum_6(start + 1, nums, target - nums[start])
-    else: 
+    else:
         return (group_sum_6(start +1, nums, target - nums[start]) or
                 group_sum_6(start + 1, nums, target))
-        
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
+
 def group_no_adj(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to
@@ -75,19 +70,18 @@ def group_no_adj(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
-    if target == 0: 
+    if target == 0:
         return True
     if start >= len(nums):
         return False
-    
+
     if group_no_adj(start + 2, nums, target - nums[start]):
         return True
     if group_no_adj(start + 1, nums, target):
-        return True 
-    else: 
-        return False 
-    
-# TODO: Modify this function. You may delete this comment when you are done.
+        return True
+    else:
+        return False
+
 def group_sum_5(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to
@@ -97,25 +91,25 @@ def group_sum_5(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
-    if target == 0: 
+    if target == 0:
         return True
     if start >= len(nums):
         return False
-    
-    if nums[start] % 5 == 0: 
+
+    if nums[start] % 5 == 0:
         if start + 1 < len(nums) and nums[start + 1] ==1:
             return group_sum_5( start + 2, nums, target - nums[start])
-        else: 
+        else:
             return group_sum_5(start + 1, nums, target - nums[start])
-    else: 
-        return group_sum_5( start + 1, nums, target - nums[start]) or group_sum_5(start + 1, nums, target)
-
-            
-
+    else:
+        return group_sum_5( start + 1, nums, target - nums[start])\
+        or group_sum_5(start + 1, nums, target)
 
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
+
+
+
 def group_sum_clump(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to
@@ -127,11 +121,11 @@ def group_sum_clump(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
-    if target == 0: 
+    if target == 0:
         return True
-    if start >= len(nums): 
+    if start >= len(nums):
         return False
-    
+
     total = nums[start]
     start2 = start + 1
 
@@ -146,7 +140,6 @@ def group_sum_clump(start, nums, target):
 
 
 
-# TODO: Modify this function
 def split_array(nums):
     """
     Given a list of ints, determine if the numbers can be split evenly into two groups
@@ -156,9 +149,11 @@ def split_array(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+    if sum(nums) % 2 != 0:
+        return False
+    target = sum(nums) // 2
+    return group_sum(0, nums, target)
 
-
-# TODO: Modify this function. You may delete this comment when you are done.
 def split_odd_10(nums):
     """
     Given a list of ints, determine if the numbers can be split evenly into two groups
@@ -168,9 +163,14 @@ def split_odd_10(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+    total_sum = sum(nums)
+    for target_odd in range(1, total_sum + 1, 2):
+        target_multiple_of_10 = total_sum - target_odd
+        if target_multiple_of_10 % 10 == 0:
+            if group_sum(0, nums, target_odd) and group_sum(0, nums, target_multiple_of_10):
+                return True
+    return False
 
-
-# TODO: Modify this function. You may delete this comment when you are done.
 def split_53(nums):
     """
     Given a list of ints, determine if the numbers can be split evenly into two groups
@@ -182,3 +182,31 @@ def split_53(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+
+    group_5 = []
+    group_3_not_5 = []
+    others = []
+
+    for num in nums:
+        if num % 5 == 0:
+            group_5.append(num)
+        elif num % 3 == 0:
+            group_3_not_5.append(num)
+        else:
+            others.append(num)
+
+
+    sum_5 = sum(group_5)
+    sum_3_not_5 = sum(group_3_not_5)
+    sum_others = sum(others)
+
+
+    total_sum = sum_5 + sum_3_not_5 + sum_others
+
+
+    if total_sum % 2 != 0:
+        return False
+
+
+    target = total_sum // 2
+    return group_sum_5(0, others, target - sum_5)
